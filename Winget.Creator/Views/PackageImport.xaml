@@ -1,0 +1,105 @@
+﻿<Page
+    x:Class="Winget.Creator.Views.PackageImport"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Winget.Creator.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:viewmodels="using:Winget.Creator.ViewModels" 
+    xmlns:mxuc="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <mxuc:InfoBar x:Name="UpdateAvailableNotification" Grid.Row="1"
+                    Title="{x:Bind ViewModel.InfoBarTitle, Mode=TwoWay}"
+                    Message="{x:Bind ViewModel.InfoBarMessage, Mode=TwoWay}"
+                    IsOpen="{x:Bind ViewModel.InfoBarVisible, Mode=TwoWay}"
+                    Severity="{x:Bind ViewModel.InfoBarSeverity, Mode=TwoWay}">
+        </mxuc:InfoBar>
+
+        <ScrollViewer Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Grid.Row="2">
+            <!--
+                The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
+                Place your content here.
+            -->
+
+            <StackPanel>
+                <TextBlock Margin="10" HorizontalAlignment="Left" Text="Load from a public repo URI" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <TextBox Name="txtAppLoadingUri" Margin="10,0,10,10" PlaceholderText="Url" Header="Application yaml Url" Text="{x:Bind ViewModel.LoadingUri, Mode=TwoWay}"/>
+                <Button Margin="10,0,10,10" Content="Load Yamls" Command="{x:Bind ViewModel.LoadFromUriCmd}" />
+
+                <TextBlock Margin="10" HorizontalAlignment="Left" Text="General" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <TextBox Name="txtAppName" Margin="10,0,10,10" PlaceholderText="Excel" Header="Package Name" Text="{x:Bind ViewModel.AppName, Mode=TwoWay}"/>
+                <TextBox Name="txtPublisher" Margin="10,0,10,10" PlaceholderText="Microsoft" Header="Publisher" Text="{x:Bind ViewModel.Publisher, Mode=TwoWay}"/>
+                <TextBox Name="txtId" Margin="10,0,10,10" PlaceholderText="Publisher.PackageName: Microsoft.Excel" Header="Package Identifier" Text="{x:Bind ViewModel.Id, Mode=TwoWay}" />
+                <TextBox Name="txtVersion" Margin="10,0,10,10" PlaceholderText="1.0 OR 1.0.0.0" Header="Package Version" Text="{x:Bind ViewModel.Version, Mode=TwoWay}" />
+                <TextBox Name="txtDescription" VerticalContentAlignment="Top" Margin="10,0,10,10" Height="100" TextWrapping="Wrap" Header="Short Description" Text="{x:Bind ViewModel.Description, Mode=TwoWay}" />
+                <!--<Separator Margin="0,10"/>-->
+
+                <TextBlock Margin="10" HorizontalAlignment="Left" Text="License" Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+                <TextBox Name="txtHomePage" Margin="10,0,10,10" PlaceholderText="https://github.com/microsoft/winget-pkgs" Header="Package Url" Text="{x:Bind ViewModel.HomePage, Mode=TwoWay}" />
+                <TextBox Name="txtLicense" Margin="10,0,10,10" PlaceholderText="MIT" Header="License" Text="{x:Bind ViewModel.Licence, Mode=TwoWay}" />
+                <TextBox Name="txtLicenseUrl" Margin="10,0,10,10" PlaceholderText="https://github.com/microsoft/winget-pkgs/blob/master/LICENSE" Header="License Url" Text="{x:Bind ViewModel.LicenceUrl, Mode=TwoWay}" />
+                <!--<Separator Margin="0,10"/>-->
+
+                <TextBlock Margin="10" HorizontalAlignment="Left" Text="Urls" Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox x:Name="lstInstaller" DisplayMemberPath="Architecture" ItemsSource="{x:Bind ViewModel.Installers}" Margin="10,10,0,0"
+                             SelectedItem="{x:Bind ViewModel.SelectedInstaller, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <StackPanel Grid.Column="1">
+                        <ComboBox Name="cmbArchitecture" Margin="10,0,10,10" PlaceholderText="x86, x64, arm, arm64, Neutral" Header="Architecture"
+                                  HorizontalAlignment="Stretch" ItemsSource="{x:Bind ViewModel.Architectures}"
+                                  SelectedValue="{x:Bind ViewModel.InstallerSelectedArchitecture, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <!--<ComboBoxItem Content="x86" />
+                            <ComboBoxItem Content="x64" />
+                            <ComboBoxItem Content="arm" />
+                            <ComboBoxItem Content="arm64" />
+                            <ComboBoxItem Content="Neutral" />-->
+                        </ComboBox>
+                        <TextBox Name="txtUrl" Margin="10,0,10,10" Header="Installer Url" PlaceholderText="Installer Url" Text="{x:Bind ViewModel.InstallerUrl,Mode=TwoWay}"/>
+                        <TextBox Name="txtHash" Margin="10,0" Header="Installer Sha256" PlaceholderText="1017c8ff310e4cb4fb843de26c93baa170fe5a4764065d9faa25a45a6d724514"
+                                 Text="{x:Bind ViewModel.InstallerSha256,Mode=TwoWay}"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <!--<Button x:Name="btnGetHashWeb"  Content="Get Hash From Installer Url"
+                                    Command="{x:Bind ViewModel.GetHasFromWebCmd}"
+                                    MinWidth="270" Margin="10,20,10,0"/>-->
+                            <Button x:Name="btnGetHashLocal" Content="Get Hash From Local Installer"
+                                    MinWidth="270" Margin="0,20,10,0"/>
+                        </StackPanel>
+                        <!--<Separator Margin="0,10"/>-->
+                        <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
+                            <Button x:Name="btnAddInstaller" Content="Add Installer" Width="200" Command="{x:Bind ViewModel.AddInstallerCmd}"/>
+                            <Button x:Name="btnRemoveInstaller" Margin="10,0" Content="Remove Installer" Width="200" Command="{x:Bind ViewModel.RemoveInstallerCmd}"/>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+                <ProgressBar Name="prgStatus" Margin="10"/>
+                <!--<Separator Margin="0,10"/>-->
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnCreate" Margin="10,10,0,10" Width="150" HorizontalAlignment="Right" Content="Create Package" Command="{x:Bind ViewModel.GenerateScriptCmd}" />
+                    <!--<Button x:Name="btnValidate" IsEnabled="False" Margin="10" Width="150" HorizontalAlignment="Right" Content="Validate Package" />
+                    <Button x:Name="btnCopy" Margin="0,10,10,10" Width="150" HorizontalAlignment="Right" Content="Copy to clipboard" />-->
+                </StackPanel>
+            </StackPanel>
+
+        </ScrollViewer>
+        
+    </Grid>
+</Page>

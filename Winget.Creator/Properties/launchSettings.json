@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Winget.Creator (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Winget.Creator (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
